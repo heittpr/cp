@@ -1,3 +1,6 @@
+// Troco Fácil
+// https://neps.academy/lesson/171
+
 #include <iostream>
 using namespace std;
 

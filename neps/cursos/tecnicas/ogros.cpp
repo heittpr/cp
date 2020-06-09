@@ -1,3 +1,6 @@
+// Ogros
+// https://neps.academy/lesson/169
+
 #include <iostream>
 using namespace std;
 
