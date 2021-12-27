@@ -1,0 +1,6 @@
+#!/bin/sh
+
+file=$1; shift
+
+mk "$file" $@ || exit 1
+./"${file%.*}"

@@ -1,0 +1,24 @@
+#!/bin/sh
+
+[ -z $1 ] && exit 1
+file=$1; shift
+
+if [ ! -f $file ]; then
+  echo "no such file"
+  exit 1
+fi
+
+base="${file%.*}"
+ext="${file##*.}"
+
+case $ext in
+  c)
+    gcc -DLOCAL $@ "$file" -o "$base" -lm
+    ;;
+  cpp|cc)
+    g++ -DLOCAL -std=c++17 -O2 $@ -o "$base" $file
+    ;;
+  *)
+    echo "invalid file"
+    exit 1
+esac
