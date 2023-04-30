@@ -1,24 +1,20 @@
 #!/bin/sh
 
-[ -z $1 ] && exit 1
-file=$1; shift
-
-if [ ! -f $file ]; then
-  echo "no such file"
+if [ -z "$1" ]; then
+  echo "no target specified" >&2
   exit 1
 fi
 
+file="$1"; shift
 base="${file%.*}"
 ext="${file##*.}"
 
 case $ext in
-  c)
-    gcc -DLOCAL $@ "$file" -o "$base" -lm
-    ;;
-  cpp|cc)
-    g++ -DLOCAL -std=c++17 -O2 $@ -o "$base" $file
+  c|cpp|cc)
+    target="$base"
     ;;
   *)
-    echo "invalid file"
-    exit 1
+    target="$file"
 esac
+
+make --silent "$target" $@
