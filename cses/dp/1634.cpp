@@ -5,12 +5,14 @@ int n, x, dp[inf];
 
 int main() {
   cin.tie(0)->sync_with_stdio(0);
-  cin >> n >> x; vector<int> c(n);
+  cin >> n >> x;
+  vector<int> c(n);
   for (int &i : c) cin >> i;
+  dp[0] = 0;
   for (int i = 1; i <= x; i++) {
     dp[i] = inf;
-    for (int j : c) if (j <= i)
-      dp[i] = min(dp[i], dp[i-j]+1);
+    for (int j : c)
+      if (j <= i) dp[i] = min(dp[i], dp[i-j]+1);
   }
   cout << (dp[x] != inf ? dp[x] : -1) << '\n';
 }

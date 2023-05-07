@@ -2,7 +2,7 @@
 using namespace std;
 const int mod = 1e9+7;
 int n, dp[1010][1010];
-
+ 
 int main() {
   cin.tie(0)->sync_with_stdio(0);
   cin >> n; char c;
