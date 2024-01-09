@@ -4,7 +4,7 @@ help() {
 cat << EOF
 usage: $(basename $0) [options] a b gen
 
-stress test a against b using gen:
+stress test a against b:
   a       solution to test
   b       ground truth
   gen     testcase generator
@@ -35,7 +35,7 @@ while getopts ":hbt" o; do
   case "$o" in
     b) DIFF_ARGS="" ;;
     t) IN="$(mktemp)" ;;
-    *) ajuda ;;
+    *) help ;;
   esac
 done
 shift $((OPTIND-1))
