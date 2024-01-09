@@ -1,0 +1,66 @@
+#!/bin/sh
+
+help() {
+cat << EOF
+usage: $(basename $0) [options] a b gen
+
+stress test a against b using gen:
+  a       solution to test
+  b       ground truth
+  gen     testcase generator
+
+options:
+  -h      show this message
+  -b      compare files in binary mode (don't ignore whitespace)
+  -t      use a temporary input file
+EOF
+exit 1
+}
+
+error() {
+  echo "$1" 1>&2
+  help
+}
+
+bold=$(tput bold)
+normal=$(tput sgr0)
+
+IN="in"
+OUTA="$(mktemp)"
+OUTB="$(mktemp)"
+
+DIFF_ARGS=" -b"
+
+while getopts ":hbt" o; do
+  case "$o" in
+    b) DIFF_ARGS="" ;;
+    t) IN="$(mktemp)" ;;
+    *) ajuda ;;
+  esac
+done
+shift $((OPTIND-1))
+
+[ $# -lt 3 ] && error "not enough arguments!"
+
+A="$1"
+B="$2"
+GEN="$3"
+
+i=1
+while true; do
+  printf "\rrunning test %s..." "$i"
+  ./"$GEN" "$i" > "$IN"
+  ./"$A" < "$IN" > "$OUTA" 2>/dev/null
+  ./"$B" < "$IN" > "$OUTB" 2>/dev/null
+  if ! diff $DIFF_ARGS "$OUTA" "$OUTB" >/dev/null 2>&1; then
+    echo " outputs differ!\n"
+    echo "${bold}input:${normal}"
+    cat in
+    echo "\n${bold}./$A:${normal}"
+    cat "$OUTA"
+    echo "\n${bold}./$B:${normal}"
+    cat "$OUTB"
+    exit 1
+  fi
+  i=$((i+1))
+done
