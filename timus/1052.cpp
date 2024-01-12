@@ -2,6 +2,7 @@
 #define all(x) x.begin(), x.end()
 #define sz(x) (int)((x).size())
 #define pb push_back
+#define gcd(x, y) __gcd(x, y)
 using namespace std;
 using ll = long long;
 using ii = pair<int, int>;
@@ -18,22 +19,18 @@ ll sarea2(pt p, pt q, pt r) {
   return (q-p)^(r-q);
 }
 
-bool col(pt p, pt q, pt r) {
-  return sarea2(p, q, r) == 0;
-}
-
 int main() {
   cin.tie(0)->sync_with_stdio(0);
   int n; cin >> n;
   vector<pt> pts(n);
   for (auto& p : pts) cin >> p;
   int ans = 0;
-  for (int i = 0; i < n; i++)
+  for (int i = 0; i < n; i++) {
+    map<ii, int> cnt;
     for (int j = i+1; j < n; j++) {
-      int cur = 2;
-      for (int k = j+1; k < n; k++)
-        if (col(pts[i], pts[j], pts[k])) cur++;
-      ans = max(ans, cur);
+      int a = pts[i].y - pts[j].y, b = pts[i].x - pts[j].x, g = gcd(a, b);
+      cnt[{a/g, b/g}]++, ans = max(ans, cnt[{a/g, b/g}]);
     }
-  cout << ans << '\n';
+  }
+  cout << ans+1 << '\n';
 }
